@@ -1,0 +1,92 @@
+import pandas as pd
+#Taking data
+data = {'Name': ["Sam", "Kia", "Jack", "lilly", "Riya", "Keshav", "Rose"],
+ 'Age': [12, 13, 14, 13, 12, 14, 13],
+ 'Gender': ['M', 'F', 'M', 'F', 'F', 'M', 'F'],
+ 'Marks': [98, 97, 'Nan', 65, 74, 'Nan', 66]}
+print(data)
+#Making Dataframe
+df = pd.DataFrame(data)
+print(df)
+#Checking null values
+#print(df.isnull().sum())
+#print(df.info())
+#print(df.describe())
+#calulate Average
+c = avg = 0
+for ele in df['Marks']:
+ if str(ele).isnumeric():
+ c += 1
+ avg += ele
+avg /= c
+print('avg',avg)
+print('c',c)
+#Replace the null values with the average values
+df = df.replace(to_replace = "Nan",
+ value = avg)
+print(df)
+#objects
+print(df.info())
+#convert object to string
+df['Gender'] = df['Gender'].map({'M' : "Male",
+ 'F' : "Female"}).astype("string") #astype is type conversion from object 
+to string
+print(df)
+print(df.info())
+
+
+
+#Data filtering
+df = df[df['Marks'] >= 75]
+print(df)
+#data filtering - remove column
+df = df.drop(['Age'], axis=1)
+print(df)
+#Add ID column to the existing table
+data['ID'] = [101, 103, 105, 104, 102, 107, 106]
+data1 = pd.DataFrame(data) #create dataframe again
+print(data1)
+#create table 2 with one column similar
+data2 = pd.DataFrame({'ID': [101, 103, 105, 104, 102, 107, 106],
+ 'Fee Status': ["Paid", "Unpaid", "Unpaid", "Unpaid", "Paid", "Unpaid", "Paid"]})
+print(data2)
+#merge the two tables using ID as the merging column
+data3 = pd.merge(data1, data2, on="ID")
+print(data3)
+#make group of the data whose age is 13
+grouped = data3.groupby('Age')
+print(grouped.get_group(13))
+
+
+Part B:
+Program:
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+#open CSV file
+df = pd.read_csv("titanic.csv")
+print(df)
+print(df.head())
+df2 = df[['Survived', 'Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare']]
+print(df2.head())
+print(df2.isnull().sum())
+print(df2.info())
+updated_df1 = df2.dropna(axis=1)
+print(updated_df1.info())
+updated_df2 = df2.dropna(axis=0)
+print(updated_df2.info())
+print('skew', df2['Age'].skew())
+#updated_df3 = df2
+#updated_df3['Age'] = updated_df3['Age'].fillna(updated_df3['Age'].mean())
+#print(updated_df3.info())
+sample = [15,101,18,7,13,16,11,21,5,15,10,9,-1]
+print('\n\nDifferent prog:')
+print('mean',np.mean(sample))
+print('median',np.median(sample))
+print("sample",sample)
+print("Q2 quantile of sample", np.median(sample))
+print("Q1 quantile of sample", np.quantile(sample, .25))
+print("Q3 quantile of sample", np.quantile(sample, .75))
+plt.boxplot(sample, vert=False)
+plt.show()
